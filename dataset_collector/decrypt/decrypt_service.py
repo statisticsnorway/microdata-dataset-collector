@@ -47,7 +47,7 @@ def decrypt():
     csv_files = [file for file in os.listdir(encrypted_dir) if file.endswith('.csv.encr')]
 
     if len(csv_files) == 0:
-        raise ResourceNotAvailableError(f'No csv.encr files found in {encrypted_dir}.')
+        raise ResourceNotAvailableError(f'No csv.encr files found in {encrypted_dir}. - Nothing to decrypt.')
 
     for csv_file in csv_files:
         variable_name = csv_file.split(".")[0]
@@ -76,6 +76,6 @@ def decrypt():
             with open(f'{decrypted_dir}/{variable_name}.csv', 'wb') as f:
                 f.write(decrypted)
         except InvalidToken as e:
-            raise InvalidKeyError(f'No csv.encr files found in {encrypted_dir}.')
+            raise InvalidKeyError(f'Not able to decrypt {variable_name}')
 
         logger.info(f'Decrypted {csv_file} into {DECRYPTED_DIR}')
