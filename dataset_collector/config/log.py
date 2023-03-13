@@ -8,7 +8,7 @@ from datetime import datetime
 from json_logging import util
 import tomlkit
 
-from job_client.config import environment
+from dataset_collector.config import environment
 
 
 class ContextFilter(logging.Filter):
