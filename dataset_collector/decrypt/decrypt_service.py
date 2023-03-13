@@ -31,6 +31,11 @@ def decrypt():
     if not os.path.exists(decrypted_dir):
         os.makedirs(decrypted_dir)
 
+    csv_files = [file for file in os.listdir(encrypted_dir) if file.endswith('.csv.encr')]
+    if len(csv_files) == 0:
+        logger.info(f'No csv.encr files found in {encrypted_dir}. - Nothing to decrypt.')
+        exit()
+
     private_key_location = f'{rsa_key_dir}/microdata_private_key.pem'
 
     if not Path(private_key_location).is_file():
@@ -44,16 +49,14 @@ def decrypt():
             backend=default_backend()
         )
 
-    csv_files = [file for file in os.listdir(encrypted_dir) if file.endswith('.csv.encr')]
-
-    if len(csv_files) == 0:
-        raise ResourceNotAvailableError(f'No csv.encr files found in {encrypted_dir}. - Nothing to decrypt.')
-
     for csv_file in csv_files:
         variable_name = csv_file.split(".")[0]
 
         # decrypt symkey
         encrypted_symkey = f'{encrypted_dir}/{variable_name}.symkey.encr'
+        if not encrypted_symkey.is_file():
+            raise ResourceNotAvailableError(f'{variable_name}.symkey.encr not found.')
+
         with open(encrypted_symkey, 'rb') as f:
             symkey = f.read()  # Read the bytes of the encrypted file
 
