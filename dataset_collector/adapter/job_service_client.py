@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 from typing import List
 
 import requests
@@ -9,8 +10,10 @@ from dataset_collector.exception import HttpRequestError, HttpResponseError
 
 logger = logging.getLogger()
 
-IMPORTABLE_DATASETS_URL = "http://localhost:10030/importable-datasets"
-JOBS_URL = "http://localhost:10030/jobs"
+JOB_SERVICE_URL = os.environ['JOB_SERVICE_URL']
+
+IMPORTABLE_DATASETS_URL = f'{JOB_SERVICE_URL}/importable-datasets'
+JOBS_URL = f'{JOB_SERVICE_URL}/jobs'
 
 
 def __create_jobs() -> List:
@@ -43,5 +46,5 @@ def __import_request(jobs: List):
     logger.info(f'Response: {json.dumps(response.json(), indent=2)}')
 
 
-def import_datasets(jobs: List):
+def import_datasets():
     __import_request(__create_jobs())

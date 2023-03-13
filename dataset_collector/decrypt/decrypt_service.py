@@ -54,7 +54,7 @@ def decrypt():
 
         # decrypt symkey
         encrypted_symkey = f'{encrypted_dir}/{variable_name}.symkey.encr'
-        if not encrypted_symkey.is_file():
+        if not Path(encrypted_symkey).is_file():
             raise ResourceNotAvailableError(f'{variable_name}.symkey.encr not found.')
 
         with open(encrypted_symkey, 'rb') as f:
@@ -82,3 +82,7 @@ def decrypt():
             raise InvalidKeyError(f'Not able to decrypt {variable_name}')
 
         logger.info(f'Decrypted {csv_file} into {DECRYPTED_DIR}')
+
+# Decrypted dir
+
+# /microdata/datastores/NO-SSB-FDB_input/ADD_DATASET_2
